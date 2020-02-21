@@ -1,5 +1,6 @@
 #include<stdio.h>
 #include<stdlib.h>
+#include<string.h>
 
 typedef struct node {
 	void* value;
@@ -18,6 +19,6 @@ int main(int argc, char** argv) {
             exit(0);
         }
     }
-	printf("Hello world\n");
+    printf("Hello world\n");
 	return 0;
 }
