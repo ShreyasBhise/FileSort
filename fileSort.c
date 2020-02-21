@@ -1,6 +1,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
+#include <fcntl.h>
 
 typedef struct node {
 	void* value;
