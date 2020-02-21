@@ -15,9 +15,10 @@ int main(int argc, char** argv) {
     }
     if(strlen(argv[1]) == 2 && argv[1][0] == '-') {
         if(argv[1][1] != 'q' && argv[1][1] != 'i' ) {
-            printf("invalid sorting flag, expected -i or -q\n);
+            printf("invalid sorting flag, expected -i or -q\n");
             exit(0);
         }
     }
+
 	return 0;
 }
