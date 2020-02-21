@@ -19,13 +19,17 @@ int main(int argc, char** argv) {
             printf("invalid sorting flag, expected -i or -q\n");
             exit(0);
         }
+
+    }
+    else {
+        printf("\"%s\" is not a valid sort flag\n", argv[1]);
+        exit(0);
     }
 	int fd = open(argv[2], O_RDONLY);
-	if(fd==-1){
-		printf("");
-		exit(0);
-	}	
-	printf("Hello world\n");
-
+	if(fd==-1) {
+        printf("File \"%s\" does not exist or could not be opened\n", argv[2]);
+        exit(0);
+    }
+    printf("works");
 	return 0;
 }
