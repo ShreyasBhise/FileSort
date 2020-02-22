@@ -14,7 +14,11 @@ typedef struct node {
 void printList(Node* node, int type){
     printf("Type is: %s\n", (type == 1) ? "int" : "string");
 	while(node!=NULL){
-		printf("%s", (char *)(node->value));
+		if(type==2){
+			printf("%s", (char *)(node->value));
+		} else {
+			printf("%d", atoi((char *)(node->value)));
+		}
 		node = node->next;
 		if(node != NULL)
 		    printf(" -> ");
@@ -51,22 +55,25 @@ int stringComparator(void* in1, void* in2) {
 }
 
 int insertionSort(void* toSort, int (*comparator)(void*, void*)) {
-	Node* oldroot = (Node*)toSort;
+	Node* curr = (Node*)toSort;
 	Node* newroot = NULL;
-	if(oldroot==NULL) return -1;
-	while(oldroot!=NULL){
-		Node* nextNode = oldroot->next;
+	if(curr==NULL) return -1;
+	while(curr!=NULL){
+		Node* nextNode = curr->next;
 		int added = 0;
 		Node* temp = newroot;
 		Node* prev = NULL;
 		while(temp!=NULL){
-			if((*comparator)(oldroot->value, temp->value)!=-1){
+			if((*comparator)(curr->value, temp->value)!=-1){
+				Node* new = (Node*)malloc(sizeof(Node));
+				new->value = curr->value;
 				if(prev!=NULL){
-					prev->next = oldroot;
+					prev->next = new;
 				} else {
-					newroot = oldroot;	
+					newroot = new;	
 				}
-				oldroot->next = temp;
+				new->next = temp;
+				
 				added = 1;
 				break;
 			} else {
@@ -75,13 +82,26 @@ int insertionSort(void* toSort, int (*comparator)(void*, void*)) {
 			}
 		}
 		if(added==0){
-			temp = oldroot;
-			temp->next = NULL;
+			if(prev==NULL){
+				Node* new = (Node*)malloc(sizeof(Node));
+				
+				new->value = curr->value;
+				newroot = new;
+				new->next = NULL;
+			} else {
+				Node* new = (Node*)malloc(sizeof(Node));
+				prev->next=new;
+				new->value = curr->value;
+				new->next = NULL;
+			}
 		}
-		oldroot = nextNode;
+		// printList(newroot, 1);
+		// printf("%s\n", (char *)(newroot->value));
+		curr = nextNode;
 	}
 	printList(newroot, 1);
-    return 0;
+	freeList(newroot);
+	return 0;
 }
 int quickSort(void* toSort, int (*comparator)(void*, void*)) {
 
@@ -157,6 +177,7 @@ int main(int argc, char** argv) {
 	}
 	int check = 5;
 	char srt = argv[1][1];
+	// printf("test\n");
 	if(type==1) {
 		int (*comparator)(void*, void*) = &intComparator;
 		if(srt=='i'){
@@ -172,10 +193,7 @@ int main(int argc, char** argv) {
 
 		}
 	}		
-	printList(root, type);
-	if(type==1){
-		printf("%d -  %d -> %d\n", atoi((char *)(root->next->value)), atoi((char *)(root->next->next->value)), intComparator(root->next->value, root->next->next->value));
-	}
+	// printList(root, type);
 	freeList(root);
 	return 0;
 }
