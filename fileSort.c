@@ -13,7 +13,7 @@ typedef struct node {
 
 void printList(Node* node){
 	while(node!=NULL){
-		printf("%s\n", (char *)(node->value));
+	//	printf("%s\n", (char *)(node->value));
 		node = node->next;
 	}
 	return;
@@ -29,7 +29,6 @@ int main(int argc, char** argv) {
             printf("invalid sorting flag, expected -i or -q\n");
             exit(0);
         }
-
     }
     else {
         printf("\"%s\" is not a valid sort flag\n", argv[1]);
@@ -56,14 +55,14 @@ int main(int argc, char** argv) {
 			if(isdigit(c)) type = 1;
 			if(isalpha(c)) type = 2;
 		}
-		// printf("%c", c);
+		printf("%c", c);
 		if(c==','){
 			Node* node = (Node*)malloc(sizeof(Node));
 			node->value = (void *)malloc(strlen(str));
 			strcpy(node->value, str);
 			node->next = root;
 			root = node;
-			// printf("%s\n", str);
+			printf("%s\n", str);
 			i=0;
 			str = (char*) realloc(str, 1);
 			continue;
