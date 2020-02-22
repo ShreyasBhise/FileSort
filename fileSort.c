@@ -11,7 +11,8 @@ typedef struct node {
 
 } Node;
 
-void printList(Node* node){
+void printList(Node* node, int type){
+    printf("Type is: %s\n", (type == 1) ? "int" : "string");
 	while(node!=NULL){
 		printf("%s", (char *)(node->value));
 		node = node->next;
@@ -20,6 +21,14 @@ void printList(Node* node){
 	}
 	printf("\n");
 	return;
+}
+void freeList(Node* node) {
+    Node* ptr = NULL;
+    while(node!= NULL) {
+        ptr = node;
+        node = node->next;
+        free(ptr);
+    }
 }
 
 int main(int argc, char** argv) {
@@ -48,8 +57,8 @@ int main(int argc, char** argv) {
 	Node* root = NULL;
 	char* str = (char*) malloc(1);
 	int i = 0;
-	while((n=read(fd, &c, 1)) != 0){ // while not end of file
-		if(n==-1){
+	while((n = read(fd, &c, 1)) != 0){ // while not end of file
+		if(n == -1){
 			// wait or something idk
 			continue;
 		}
@@ -77,8 +86,8 @@ int main(int argc, char** argv) {
 			continue;
 		}
 		str = (char *)realloc(str, i+1);
-		str[i]=c;
-		str[i+1]='\0';
+		str[i] = c;
+		str[i+1] = '\0';
 		i++;
 		
 	}
@@ -91,6 +100,7 @@ int main(int argc, char** argv) {
 		free(str);
 	}
 
-	printList(root);
+	printList(root, type);
+	freeList(root);
 	return 0;
 }
