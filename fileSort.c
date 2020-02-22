@@ -30,7 +30,14 @@ void freeList(Node* node) {
         free(ptr);
     }
 }
+int insertionSort(void* toSort, int (*comparator)(void*, void*)) {
 
+    return -1;
+}
+int quickSort(void* toSort, int (*comparator)(void*, void*)) {
+
+    return -1;
+}
 int main(int argc, char** argv) {
     if(argc < 3) {
         printf("expected two arguments, had one\n");
