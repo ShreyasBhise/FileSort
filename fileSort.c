@@ -13,9 +13,12 @@ typedef struct node {
 
 void printList(Node* node){
 	while(node!=NULL){
-	//	printf("%s\n", (char *)(node->value));
+		printf("%s", (char *)(node->value));
 		node = node->next;
+		if(node != NULL)
+		    printf(" -> ");
 	}
+	printf("\n");
 	return;
 }
 
@@ -35,7 +38,7 @@ int main(int argc, char** argv) {
         exit(0);
     }
 	int fd = open(argv[2], O_RDONLY);
-	if(fd==-1) {
+	if(fd == -1) {
         printf("File \"%s\" does not exist or could not be opened\n", argv[2]);
         exit(0);
     }
@@ -45,25 +48,31 @@ int main(int argc, char** argv) {
 	Node* root = NULL;
 	char* str = (char*) malloc(1);
 	int i = 0;
-	while((n=read(fd, &c, 1))!=0){
+	while((n=read(fd, &c, 1)) != 0){ // while not end of file
 		if(n==-1){
 			// wait or something idk
 			continue;
 		}
+		// Ignore all whitespace
 		if(isspace(c)) continue;
-		if(type==0){
+		// Determine type of data
+		if(type == 0){
 			if(isdigit(c)) type = 1;
 			if(isalpha(c)) type = 2;
 		}
-		printf("%c", c);
-		if(c==','){
-			Node* node = (Node*)malloc(sizeof(Node));
-			node->value = (void *)malloc(strlen(str));
-			strcpy(node->value, str);
+		//printf("'%c' %d\n", c, i);
+		if(c == ','){
+            Node* node = (Node*)malloc(sizeof(Node));
+            node->value = (void *)malloc(strlen(str));
+            if(i == 0) {
+                strcpy(node->value, "");
+            }
+			else {
+                strcpy(node->value, str);
+            }
 			node->next = root;
 			root = node;
-			printf("%s\n", str);
-			i=0;
+			i = 0;
 			str = (char*) realloc(str, 1);
 			continue;
 		}
@@ -73,7 +82,7 @@ int main(int argc, char** argv) {
 		i++;
 		
 	}
-	if(i>0){
+	if(i > 0) {
 		Node* node = (Node*)malloc(sizeof(Node));
 		node->value = (void *)malloc(strlen(str));
 		strcpy(node->value, str);
@@ -81,6 +90,7 @@ int main(int argc, char** argv) {
 		root = node;
 		free(str);
 	}
+
 	printList(root);
 	return 0;
 }
