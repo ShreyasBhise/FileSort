@@ -30,9 +30,58 @@ void freeList(Node* node) {
         free(ptr);
     }
 }
-int insertionSort(void* toSort, int (*comparator)(void*, void*)) {
 
-    return -1;
+// Both comparator functions return
+// 1 if the second is greater, -1 if
+// the first is greater, and 0 in the
+// equal case
+
+int intComparator(void* in1, void* in2) {
+	int x = atoi((char*)in1);
+	int y = atoi((char*)in2);
+	if(x>y) return -1;
+	else if (x<y) return 1;
+	return 0;
+}
+
+int stringComparator(void* in1, void* in2) {
+	char* str1 = (char*)in1;
+	char* str2 = (char*)in2;
+	return 0;
+}
+
+int insertionSort(void* toSort, int (*comparator)(void*, void*)) {
+	Node* oldroot = (Node*)toSort;
+	Node* newroot = NULL;
+	if(oldroot==NULL) return -1;
+	while(oldroot!=NULL){
+		Node* nextNode = oldroot->next;
+		int added = 0;
+		Node* temp = newroot;
+		Node* prev = NULL;
+		while(temp!=NULL){
+			if((*comparator)(oldroot->value, temp->value)!=-1){
+				if(prev!=NULL){
+					prev->next = oldroot;
+				} else {
+					newroot = oldroot;	
+				}
+				oldroot->next = temp;
+				added = 1;
+				break;
+			} else {
+				prev = temp;
+				temp = temp->next;
+			}
+		}
+		if(added==0){
+			temp = oldroot;
+			temp->next = NULL;
+		}
+		oldroot = nextNode;
+	}
+	printList(newroot, 1);
+    return 0;
 }
 int quickSort(void* toSort, int (*comparator)(void*, void*)) {
 
@@ -106,8 +155,27 @@ int main(int argc, char** argv) {
 		root = node;
 		free(str);
 	}
+	int check = 5;
+	char srt = argv[1][1];
+	if(type==1) {
+		int (*comparator)(void*, void*) = &intComparator;
+		if(srt=='i'){
+			check = insertionSort((void *)root, (*comparator));
+		} else if (srt=='q'){
 
+		}
+	} else if (type==2) {
+		int (*comparator)(void*, void*) = &stringComparator;
+		if(srt=='i'){
+
+		} else if (srt=='q') {
+
+		}
+	}		
 	printList(root, type);
+	if(type==1){
+		printf("%d -  %d -> %d\n", atoi((char *)(root->next->value)), atoi((char *)(root->next->next->value)), intComparator(root->next->value, root->next->next->value));
+	}
 	freeList(root);
 	return 0;
 }
