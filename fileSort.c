@@ -12,7 +12,8 @@ typedef struct node {
 
 } Node;
 
-void printList(Node* node, int type){
+void printList(Node* toPrint, int type){
+    Node* node = toPrint;
     printf("Type is: %s\n", (type == 1) ? "int" : "string");
 	while(node!=NULL){
 		if(type==2){
@@ -70,26 +71,30 @@ int stringComparator(void* in1, void* in2) {
 	return -1;
 }
 int insertionSort1(void* toSort, int (*comparator)(void*, void*)) {
- //   printf("insertionSort1-Beginning\n");
-    Node* curr = (Node*)toSort;
-   // printf("insertionSort2-Pointer to \n");
-    Node* root = malloc(sizeof(Node));
-    //printf("insertionSort3\n");
-    //printf("insertionSort4");
-
-    if(curr == NULL) return -1;
-    while(curr != NULL) {
-        Node* iterate = root;
-        while(iterate->next != NULL && (*comparator)(curr->value, iterate->next->value) == -1) {
-            iterate = iterate->next;
+    Node* ptr1 = (Node*) toSort;
+    if(ptr1 == NULL || ptr1->next == NULL) return -1;
+    ptr1 = ptr1->next;
+    while(ptr1 != NULL) {
+        void* data = ptr1->value;
+        int found = 0;
+        Node* ptr2 =(Node*) toSort;
+        while(ptr1 != ptr2) {
+            if((*comparator)(ptr1->value, ptr2->value) == 1 && found == 0) {
+                ptr1->value = ptr2->value;
+                ptr2->value = data;
+                found = 1;
+            }
+            else if(found == 1){
+                void* temp = data;
+                data = ptr2->value;
+                ptr2->value = temp;
+            }
+            ptr2 = ptr2->next;
         }
-        Node* temp = curr->next;
-        curr->next = iterate->next;
-        iterate->next = curr;
-        curr = temp;
-        printList(root->next, 1);
+        ptr2->value = data;
+        ptr1 = ptr1->next;
     }
-    root = root->next;
+    printList((Node*) toSort, 1);
     return 0;
 }
 int insertionSort(void* toSort, int (*comparator)(void*, void*)) {
@@ -192,7 +197,6 @@ int main(int argc, char** argv) {
 			else {
                 strcpy(node->value, str);
             }
-			printf("%s\n", (char*) node->value );
 			node->next = root;
 			root = node;
 			i = 0;
