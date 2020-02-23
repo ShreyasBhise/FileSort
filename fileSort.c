@@ -4,6 +4,7 @@
 #include<fcntl.h>
 #include<errno.h>
 #include<ctype.h>
+#include<unistd.h>
 
 typedef struct node {
 	void* value;
@@ -52,7 +53,7 @@ int intComparator(void* in1, void* in2) {
 int stringComparator(void* in1, void* in2) {
 	char* str1 = (char*)in1;
 	char* str2 = (char*)in2;
-	while(*str1 != NULL  && *str2 != NULL) {
+	while(*str1 != '\0'  && *str2 != '\0') {
         if(*str1 == *str2) {
             str1++;
             str2++;
@@ -62,13 +63,35 @@ int stringComparator(void* in1, void* in2) {
         else
             return -1;
 	}
-	if(*str1 == NULL && *str2 == NULL)
+	if(*str1 == '\0' && *str2 == '\0')
 	    return 0;
-	else if (*str1 == NULL)
+	else if (*str1 == '\0')
 	    return 1;
 	return -1;
 }
+int insertionSort1(void* toSort, int (*comparator)(void*, void*)) {
+ //   printf("insertionSort1-Beginning\n");
+    Node* curr = (Node*)toSort;
+   // printf("insertionSort2-Pointer to \n");
+    Node* root = malloc(sizeof(Node));
+    //printf("insertionSort3\n");
+    //printf("insertionSort4");
 
+    if(curr == NULL) return -1;
+    while(curr != NULL) {
+        Node* iterate = root;
+        while(iterate->next != NULL && (*comparator)(curr->value, iterate->next->value) == -1) {
+            iterate = iterate->next;
+        }
+        Node* temp = curr->next;
+        curr->next = iterate->next;
+        iterate->next = curr;
+        curr = temp;
+        printList(root->next, 1);
+    }
+    root = root->next;
+    return 0;
+}
 int insertionSort(void* toSort, int (*comparator)(void*, void*)) {
 	Node* curr = (Node*)toSort;
 	Node* newroot = NULL;
@@ -99,17 +122,18 @@ int insertionSort(void* toSort, int (*comparator)(void*, void*)) {
 		if(added == 0){
 			if(prev == NULL){
 				Node* new = (Node*) malloc(sizeof(Node));
-
 				new->value = curr->value;
 				newroot = new;
 				new->next = NULL;
 			} else {
 				Node* new = (Node*) malloc(sizeof(Node));
-				prev->next=new;
+				prev->next = new;
 				new->value = curr->value;
 				new->next = NULL;
 			}
 		}
+		printList(newroot, 2);
+
 		curr = nextNode;
 	}
 //	printList(newroot, 2);
@@ -161,13 +185,14 @@ int main(int argc, char** argv) {
 		//printf("'%c' %d\n", c, i);
 		if(c == ','){
             Node* node = (Node*)malloc(sizeof(Node));
-            node->value = (void *)malloc(strlen(str));
+            node->value = (void *)malloc(strlen(str) + 1);
             if(i == 0) {
                 strcpy(node->value, "");
             }
 			else {
                 strcpy(node->value, str);
             }
+			printf("%s\n", (char*) node->value );
 			node->next = root;
 			root = node;
 			i = 0;
@@ -181,28 +206,31 @@ int main(int argc, char** argv) {
 		
 	}
 	if(i > 0) {
+	    str = (char *)realloc(str, i+1);
+	    str[i+1] = '\0';
 		Node* node = (Node*)malloc(sizeof(Node));
-		node->value = (void *)malloc(strlen(str));
+		node->value = (void *)malloc(strlen(str) + 1);
 		strcpy(node->value, str);
 		node->next = root;
 		root = node;
 		free(str);
 	}
+	printList(root, 1);
 	int check = 5;
 	char sortType = argv[1][1];
 	if(type == 1) {
 		if(sortType == 'i'){
-			check = insertionSort((void *)root, &intComparator);
+		    printf("Calling sort\n");
+			check = insertionSort1((void *) root, intComparator);
 		} else if (sortType == 'q'){
-            check = quickSort((void *) root, &intComparator);
+            check = quickSort((void *) root, intComparator);
 		}
 	} else if (type == 2) {
 		if(sortType == 'i'){
-            check = insertionSort((void *) root, &stringComparator);
+            check = insertionSort((void *) root, stringComparator);
 		} else if (sortType == 'q') {
-            check = quickSort((void * ) root, &stringComparator);
+            check = quickSort((void * ) root, stringComparator);
 		}
 	}
-
 	return 0;
 }
