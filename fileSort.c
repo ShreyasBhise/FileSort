@@ -35,45 +35,60 @@ void freeList(Node* node) {
     }
 }
 
-// Both comparator functions return
-// 1 if the second is greater, -1 if
-// the first is greater, and 0 in the
-// equal case
+/*  Both comparator functions return
+ *  1 if the second is greater, -1 if
+ *  the first is greater, and 0 in the
+ *  equal case
+ */
 
 int intComparator(void* in1, void* in2) {
 	int x = atoi((char*)in1);
 	int y = atoi((char*)in2);
-	if(x>y) return -1;
-	else if (x<y) return 1;
+	if(x > y) return -1;
+	else if (x < y) return 1;
 	return 0;
 }
 
 int stringComparator(void* in1, void* in2) {
 	char* str1 = (char*)in1;
 	char* str2 = (char*)in2;
-	return 0;
+	while(*str1 != NULL  && *str2 != NULL) {
+        if(*str1 == *str2) {
+            str1++;
+            str2++;
+        }
+        else if(*str1 < *str2)
+            return 1;
+        else
+            return -1;
+	}
+	if(*str1 == NULL && *str2 == NULL)
+	    return 0;
+	else if (*str1 == NULL)
+	    return 1;
+	return -1;
 }
 
 int insertionSort(void* toSort, int (*comparator)(void*, void*)) {
 	Node* curr = (Node*)toSort;
 	Node* newroot = NULL;
-	if(curr==NULL) return -1;
-	while(curr!=NULL){
+	if(curr == NULL) return -1;
+	while(curr != NULL){
 		Node* nextNode = curr->next;
 		int added = 0;
 		Node* temp = newroot;
 		Node* prev = NULL;
-		while(temp!=NULL){
-			if((*comparator)(curr->value, temp->value)!=-1){
+		while(temp != NULL){
+			if((*comparator)(curr->value, temp->value) != -1){
 				Node* new = (Node*)malloc(sizeof(Node));
 				new->value = curr->value;
-				if(prev!=NULL){
+				if(prev != NULL){
 					prev->next = new;
 				} else {
-					newroot = new;	
+					newroot = new;
 				}
 				new->next = temp;
-				
+
 				added = 1;
 				break;
 			} else {
@@ -81,26 +96,24 @@ int insertionSort(void* toSort, int (*comparator)(void*, void*)) {
 				temp = temp->next;
 			}
 		}
-		if(added==0){
-			if(prev==NULL){
-				Node* new = (Node*)malloc(sizeof(Node));
-				
+		if(added == 0){
+			if(prev == NULL){
+				Node* new = (Node*) malloc(sizeof(Node));
+
 				new->value = curr->value;
 				newroot = new;
 				new->next = NULL;
 			} else {
-				Node* new = (Node*)malloc(sizeof(Node));
+				Node* new = (Node*) malloc(sizeof(Node));
 				prev->next=new;
 				new->value = curr->value;
 				new->next = NULL;
 			}
 		}
-		// printList(newroot, 1);
-		// printf("%s\n", (char *)(newroot->value));
 		curr = nextNode;
 	}
-	printList(newroot, 1);
-	freeList(newroot);
+//	printList(newroot, 2);
+//	freeList(newroot);
 	return 0;
 }
 int quickSort(void* toSort, int (*comparator)(void*, void*)) {
@@ -176,24 +189,20 @@ int main(int argc, char** argv) {
 		free(str);
 	}
 	int check = 5;
-	char srt = argv[1][1];
-	// printf("test\n");
-	if(type==1) {
-		int (*comparator)(void*, void*) = &intComparator;
-		if(srt=='i'){
-			check = insertionSort((void *)root, (*comparator));
-		} else if (srt=='q'){
-
+	char sortType = argv[1][1];
+	if(type == 1) {
+		if(sortType == 'i'){
+			check = insertionSort((void *)root, &intComparator);
+		} else if (sortType == 'q'){
+            check = quickSort((void *) root, &intComparator);
 		}
-	} else if (type==2) {
-		int (*comparator)(void*, void*) = &stringComparator;
-		if(srt=='i'){
-
-		} else if (srt=='q') {
-
+	} else if (type == 2) {
+		if(sortType == 'i'){
+            check = insertionSort((void *) root, &stringComparator);
+		} else if (sortType == 'q') {
+            check = quickSort((void * ) root, &stringComparator);
 		}
-	}		
-	// printList(root, type);
-	freeList(root);
+	}
+
 	return 0;
 }
