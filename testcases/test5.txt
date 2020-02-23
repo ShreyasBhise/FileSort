@@ -1,0 +1,5 @@
+add, subtract, multiply, divide, forall, thereexists, induction, direct, contradiction, contrapositive,
+math, expectedvalue, variance, mean, median, probability, dfa, nfa, stronginduction, inductiona, inductionb,
+derivative, integral,,
+end, the, world, stop, time, hello, world,
+ddddddd,,aaaaaaa, abdfaeradfasdfawegadgsfgjasfsadfawefawefasdfsdkhuluihkfuyjfyujkgyukghjkgyukfghjkghukghjkghjkgyukhjfmfghjgyukgfhjghjhkjlhjklhjklhjklhjklhuiljkhhjlhjklhjklhjklhjklhjklhjklhjklhjklhklhjklhkljhhjklhjklhlityufhgjkluigyfthgcjkloiuytfrdgfhjgkhiopuyfthjkliopugytfrgdfxghjkuiolkmngfdfghjkhgfdsxcvbnmrtyuiytrdxcvbhjiotuyfdrse

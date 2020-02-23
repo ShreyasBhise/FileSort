@@ -43,6 +43,7 @@ void freeList(Node* node) {
     while(node!= NULL) {
         ptr = node;
         node = node->next;
+        free(ptr->value);
         free(ptr);
     }
 }
@@ -215,7 +216,7 @@ int main(int argc, char** argv) {
 		}
 		str = (char *)realloc(str, i+1);
 		str[i] = c;
-		str[i+1] = '\0';
+
 		i++;
 		
 	}
