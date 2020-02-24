@@ -158,8 +158,41 @@ int insertionSort(void* toSort, int (*comparator)(void*, void*)) {
 	return 0;
 } */
 int quickSort(void* toSort, int (*comparator)(void*, void*)) {
-
-    return -1;
+	Node* pivot = (Node*)toSort;
+	if(pivot==NULL){
+		return -1;
+	}
+	Node* curr = pivot->next;
+	Node* ptr1 = NULL;
+	Node* ptr2 = NULL;
+	while(curr!=NULL){
+		Node* next = curr->next;
+		if((*comparator)(curr->value, pivot->value)!=-1){
+			curr->next = ptr1;
+			ptr1 = curr;
+		} else {
+			curr->next = ptr2;
+			ptr2 = curr;
+		}
+		curr = next;
+	}
+	int x = quickSort((void*)ptr1, (*comparator));
+	int y = quickSort((void*)ptr2, (*comparator));
+	Node* temp = ptr1;
+	void* data = pivot->value;
+	if(temp==NULL){
+		pivot->next = ptr2;
+		return;
+	}
+	pivot->value = temp->value;
+	while(temp->next!=NULL){
+		temp->value = temp->next->value;
+		temp = temp->next;
+	}
+	temp->value = data;
+	pivot->next = ptr1;
+	temp->next = ptr2;
+    return 0;
 }
 int main(int argc, char** argv) {
     if(argc < 3) {
