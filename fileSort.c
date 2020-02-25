@@ -191,6 +191,7 @@ int main(int argc, char** argv) {
 		if(c == ','){
             Node* node = (Node*)malloc(sizeof(Node));
             node->value = (void *)malloc(strlen(str) + 1);
+			str[i]='\0';
             if(i == 0) {
                 strcpy(node->value, "");
             }
@@ -211,7 +212,7 @@ int main(int argc, char** argv) {
 	}
 	if(i > 0) {
 	    str = (char *)realloc(str, i+1);
-	    str[i+1] = '\0';
+	    str[i] = '\0';
 		Node* node = (Node*)malloc(sizeof(Node));
 		node->value = (void *)malloc(strlen(str) + 1);
 		strcpy(node->value, str);
