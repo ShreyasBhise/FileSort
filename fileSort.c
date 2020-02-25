@@ -11,7 +11,8 @@ typedef struct node {
 	struct node* next;
 
 } Node;
-void printListAsFinal(Node* toPrint, int type) {
+
+void printList(Node* toPrint, int type) {
     Node* ptr = toPrint;
     while(ptr != NULL) {
         if(type == 1)
@@ -22,7 +23,8 @@ void printListAsFinal(Node* toPrint, int type) {
     }
     return;
 }
-void printList(Node* toPrint, int type){
+
+/*void printList(Node* toPrint, int type){
     Node* node = toPrint;
     printf("Type is: %s\n", (type == 1) ? "int" : "string");
 	while(node!=NULL){
@@ -37,7 +39,7 @@ void printList(Node* toPrint, int type){
 	}
 	printf("\n");
 	return;
-}
+} */
 void freeList(Node* node) {
     Node* ptr = NULL;
     while(node!= NULL) {
@@ -109,65 +111,18 @@ int insertionSort(void* toSort, int (*comparator)(void*, void*)) {
     }
     return 0;
 }
-/*int insertionSort(void* toSort, int (*comparator)(void*, void*)) {
-	Node* curr = (Node*)toSort;
-	Node* newroot = NULL;
-	if(curr == NULL) return -1;
-	while(curr != NULL){
-		Node* nextNode = curr->next;
-		int added = 0;
-		Node* temp = newroot;
-		Node* prev = NULL;
-		while(temp != NULL){
-			if((*comparator)(curr->value, temp->value) != -1){
-				Node* new = (Node*)malloc(sizeof(Node));
-				new->value = curr->value;
-				if(prev != NULL){
-					prev->next = new;
-				} else {
-					newroot = new;
-				}
-				new->next = temp;
 
-				added = 1;
-				break;
-			} else {
-				prev = temp;
-				temp = temp->next;
-			}
-		}
-		if(added == 0){
-			if(prev == NULL){
-				Node* new = (Node*) malloc(sizeof(Node));
-				new->value = curr->value;
-				newroot = new;
-				new->next = NULL;
-			} else {
-				Node* new = (Node*) malloc(sizeof(Node));
-				prev->next = new;
-				new->value = curr->value;
-				new->next = NULL;
-			}
-		}
-		printList(newroot, 2);
-
-		curr = nextNode;
-	}
-	printList(newroot, 2);
-	freeList(newroot);
-	return 0;
-} */
 int quickSort(void* toSort, int (*comparator)(void*, void*)) {
 	Node* pivot = (Node*)toSort;
-	if(pivot==NULL){
+	if(pivot == NULL){
 		return -1;
 	}
 	Node* curr = pivot->next;
 	Node* ptr1 = NULL;
 	Node* ptr2 = NULL;
-	while(curr!=NULL){
+	while(curr != NULL){
 		Node* next = curr->next;
-		if((*comparator)(curr->value, pivot->value)!=-1){
+		if((*comparator)(curr->value, pivot->value) != -1){
 			curr->next = ptr1;
 			ptr1 = curr;
 		} else {
@@ -180,12 +135,12 @@ int quickSort(void* toSort, int (*comparator)(void*, void*)) {
 	int y = quickSort((void*)ptr2, (*comparator));
 	Node* temp = ptr1;
 	void* data = pivot->value;
-	if(temp==NULL){
+	if(temp == NULL){
 		pivot->next = ptr2;
-		return;
+		return 0;
 	}
 	pivot->value = temp->value;
-	while(temp->next!=NULL){
+	while(temp->next != NULL){
 		temp->value = temp->next->value;
 		temp = temp->next;
 	}
@@ -194,6 +149,7 @@ int quickSort(void* toSort, int (*comparator)(void*, void*)) {
 	temp->next = ptr2;
     return 0;
 }
+
 int main(int argc, char** argv) {
     if(argc < 3) {
         printf("expected two arguments, had one\n");
@@ -263,6 +219,9 @@ int main(int argc, char** argv) {
 		root = node;
 		free(str);
 	}
+	if(type == 0) {
+	    printf("Warning: your file only contains empty tokens.\n");
+	}
 	int check = 5;
 	char sortType = argv[1][1];
 	if(type == 1) {
@@ -278,7 +237,7 @@ int main(int argc, char** argv) {
             check = quickSort((void * ) root, stringComparator);
 		}
 	}
-	printListAsFinal(root, type);
+    (type != 0) ? printList(root, type) : printList(root, 2);
 	freeList(root);
 	return 0;
 }
