@@ -174,7 +174,8 @@ int main(int argc, char** argv) {
 	int n = 0;
 	int type = 0; // type=0 is undeclared, type=1 is int, type=2 is string
 	Node* root = NULL;
-	char* str = (char*) malloc(1);
+	int size = 10;
+	char* str = (char*) malloc(size);
 	int i = 0;
 	while((n = read(fd, &c, 1)) != 0){ // while not end of file
 		if(n == -1){
@@ -190,7 +191,7 @@ int main(int argc, char** argv) {
 		}
 		if(c == ','){
             Node* node = (Node*)malloc(sizeof(Node));
-            node->value = (void *)malloc(strlen(str) + 1);
+            node->value = (void *)malloc(size);
 			str[i]='\0';
             if(i == 0) {
                 strcpy(node->value, "");
@@ -201,25 +202,34 @@ int main(int argc, char** argv) {
 			node->next = root;
 			root = node;
 			i = 0;
-			str = (char*) realloc(str, 1);
+			size = 10;
+			char* temp = (char *)malloc(size);
+			char* temp2 = str;
+			str = temp;
+			free(temp2);
 			continue;
 		}
-		str = (char *)realloc(str, i+1);
+		if(i>=size-1){
+			size = size*2;
+			char* temp = (char *)malloc(size);
+			strcpy(temp, str);
+			char* temp2 = str;
+			str = temp;
+			free(temp2);
+		}
 		str[i] = c;
-
 		i++;
 		
 	}
 	if(i > 0) {
-	    str = (char *)realloc(str, i+1);
 	    str[i] = '\0';
 		Node* node = (Node*)malloc(sizeof(Node));
-		node->value = (void *)malloc(strlen(str) + 1);
+		node->value = (void *)malloc(size);
 		strcpy(node->value, str);
 		node->next = root;
 		root = node;
-		free(str);
 	}
+	free(str);
 	if(type == 0) {
 	    printf("Warning: your file only contains empty tokens.\n");
 	}
