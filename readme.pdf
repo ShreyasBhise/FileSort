@@ -1,1 +1,5 @@
 Documentation
+
+<b> Synopsis <\b>
+	./a.out (sort flag) (relative file path)
+

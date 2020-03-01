@@ -229,7 +229,7 @@ int main(int argc, char** argv) {
 		node->next = root;
 		root = node;
 	}
-	free(str);
+	//free(str);
 	if(type == 0) {
 	    printf("Warning: your file only contains empty tokens.\n");
 	}
