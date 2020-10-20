@@ -1,5 +1,10 @@
 # SystemsAsst0
 
+TL;DR: Insertion sort and quicksort on files full of strings of ASCII characters and files full of integers.
+
+
+Project Description:
+
 You will write some code to read in data from a file, sort it and output the sorted values. In this case while the 
 representation will be the same for all files, the data may be different. This is to say all files will be ASCII character 
 files, however some will hold numeric data and some will hold strings. Your code will need to decide which type of information 
